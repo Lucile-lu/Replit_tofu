@@ -46,7 +46,7 @@ KEYWORDS = {
         "file": "hehe.gif"},
     "豆腐": {
         "text": "我是豆腐，雖然媽媽常忘了我🥹，但只要你提到某些詞，我就會跑出來提醒你喔🐶",
-        "file": "poor_tofu.jpg"
+        "file": "poor tofu.jpg"
     },
     "豆腐晚安": {
         "text": "💤💤💤",
