@@ -18,26 +18,44 @@ async def on_ready():
 async def 豆腐(ctx):
     await ctx.send("我是玲玲的豆腐🐶")
 
-# ===== 關鍵詞分區 =====
-REMINDERS = {
-    "情侶": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "orm": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "好嗑": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "愛嗑": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "陳奧": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "陳美玲": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "奧比": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
-    "korn": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️"
-}
-
-INTRO = {
-    "豆腐":  {"text": "我是豆腐，雖然媽媽常忘了我🥹，但只要你提到某些詞，我就會跑出來提醒你喔🐶",
-            "file": "poor tofu.jpg"}
-}
-
-GOODNIGHT = {
-    "豆腐晚安": "💤💤💤",
-    "晚安豆腐": "💤💤💤"
+# ===== 關鍵詞對應訊息與檔案 =====
+KEYWORDS = {
+    "情侶": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "orm": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "好嗑": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "愛嗑": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "陳奧": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "陳美玲": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "奧比": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "korn": {
+        "text": "💡 來自豆腐的小提醒：請專注我們可愛的玲玲喔☺️",
+        "file": "hehe.gif"},
+    "豆腐": {
+        "text": "我是豆腐，雖然媽媽常忘了我🥹，但只要你提到某些詞，我就會跑出來提醒你喔🐶",
+        "file": "poor_tofu.jpg"
+    },
+    "豆腐晚安": {
+        "text": "💤💤💤",
+        "file": None
+    },
+    "晚安豆腐": {
+        "text": "💤💤💤",
+        "file": None
+    }
 }
 
 # ===== 早安 GIF 檔案路徑 =====
@@ -85,22 +103,19 @@ async def on_message(message):
         else:
             return
 
-    # ===== 晚安訊息 =====
-    for key, reply in GOODNIGHT.items():
+    # ===== 關鍵詞觸發文字或檔案 =====
+    for key, info in KEYWORDS.items():
         if key in msg_lower:
-            await message.channel.send(reply)
-            return
+            text = info.get("text")
+            file_path = info.get("file")
 
-    # ===== 自我介紹 =====
-    for key, reply in INTRO.items():
-        if key in msg_lower:
-            await message.channel.send(reply)
-            return
-
-    # ===== 關鍵詞提醒 =====
-    for key, reply in REMINDERS.items():
-        if key in msg_lower:
-            await message.channel.send(f"👉 {message.author.mention} 提到關鍵詞 **{key}**\n{reply}")
+            if file_path:
+                if os.path.exists(file_path):
+                    await message.channel.send(text, file=discord.File(file_path))
+                else:
+                    await message.channel.send(f"{text}\n❌ 找不到檔案: {file_path}")
+            else:
+                await message.channel.send(text)
             return
 
     await bot.process_commands(message)
